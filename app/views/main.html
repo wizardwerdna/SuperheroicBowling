@@ -7,3 +7,18 @@
 <div class="rolls">{{rolls}}</div>
 
 <div class="frameScores">{{rolls | frameScores}}</div>
+
+<div class="frames">
+  <div class="frame" ng-repeat="frame in [1,2,3,4,5,6,7,8,9]">
+    <div class="roll-display"></div>
+    <div class="roll-display"></div>
+    <div class="frame-score">{{(rolls | frameScores)[frame-1]}}</div>
+  </div>
+  <div class="frame tenth">
+    <div class="roll-display"></div>
+    <div class="roll-display"></div>
+    <div class="roll-display"></div>
+    <div class="frame-score">{{(rolls | frameScores)[10-1]}}</div>
+  </div>
+</div>
+
