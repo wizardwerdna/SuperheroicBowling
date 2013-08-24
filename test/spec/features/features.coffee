@@ -14,7 +14,8 @@ describe "Features: ", ->
     app = ($compile html) $rootScope.$new()
     $rootScope.$digest()
 
-  roll = (pins) -> app.find('.roll').eq(pins).click()
+  rollButtons = -> app.find('.roll')
+  roll = (pins) -> rollButtons().eq(pins).click()
   reset = -> app.find('.reset').click()
   rollsDisplay = -> app.find('.roll-display').text()
 
@@ -25,7 +26,7 @@ describe "Features: ", ->
 
     describe "input means", ->
       it "should have 11 roll buttons", ->
-        (expect app.find('.roll').length).toBe 11
+        (expect rollButtons().length).toBe 11
       it "should have a reset button", ->
         (expect app.find('.reset').length).toBe 1
 
@@ -93,3 +94,41 @@ describe "Features: ", ->
         roll(10)
         (expect rollDisplay()).toBe " X"
 
+  describe "User Error Protection", ->
+    describe "game over", ->
+      it "buttons should be enabled when created", ->
+        (expect rollButtons().is(':disabled')).toBeFalsy()
+
+      it "buttons should be enabled when reset", ->
+        roll(5)
+        reset()
+        (expect rollButtons().is(':disabled')).toBeFalsy()
+
+      it "should disable all the pins when the games is over", ->
+        roll(10) for i in [1..12]
+        (expect rollButtons().is(':enabled')).toBeFalsy()
+
+    describe "on second roll of a frame", ->
+      it "disable buttons that would be too large for a spare",->
+        roll(3)
+        (expect rollButtons().eq(8).is(':disabled')).toBeTruthy()
+        (expect rollButtons().eq(10).is(':disabled')).toBeTruthy()
+      it "enables buttons that would not be too large for a spare", ->
+        roll(3)
+        (expect rollButtons().eq(0).is(':enabled')).toBeTruthy()
+        (expect rollButtons().eq(7).is(':enabled')).toBeTruthy()
+    describe "on the tenth frame", ->
+      it "should enable buttons after a first roll strike", ->
+        roll(10) for i in [1..10]
+        (expect rollButtons().eq(0).is(':enabled')).toBeTruthy()
+        (expect rollButtons().eq(10).is(':enabled')).toBeTruthy()
+      it "should disable buttons on third roll ater a strike too big for spare", ->
+        roll(10) for i in [1..10]
+        roll(5)
+        (expect rollButtons().eq(5).is(':enabled')).toBeTruthy()
+        (expect rollButtons().eq(6).is(':disabled')).toBeTruthy()
+        (expect rollButtons().eq(10).is(':disabled')).toBeTruthy()
+      it "should leave all buttons enabled after a double", ->
+        roll(10) for i in [1..11]
+        (expect rollButtons().eq(1).is(':enabled')).toBeTruthy()
+        (expect rollButtons().eq(10).is(':enabled')).toBeTruthy()
