@@ -15,6 +15,7 @@ body {
 }
 
 .frames{
+  @include clearfix();
   clear: both;
   margin-top: 5px;
 }

@@ -1,0 +1,18 @@
+<button class="roll" ng-disabled="disabled(pins)" ng-click="addRoll(pins)" 
+  ng-repeat="pins in [0,1,2,3,4,5,6,7,8,9,10]">{{pins}}</button>
+
+<button class="reset" ng-click="reset()">Reset</button>
+
+<div class="frames">
+  <div class="frame" ng-repeat="frame in [1,2,3,4,5,6,7,8,9]">
+    <div class="roll-display">{{rollDisplay[2*(frame-1)]}}</div>
+    <div class="roll-display">{{rollDisplay[2*(frame-1)+1]}}</div>
+    <div class="frame-score">{{frameScores[frame-1]}}</div>
+  </div>
+  <div class="frame tenth">
+    <div class="roll-display">{{rollDisplay[18]}}</div>
+    <div class="roll-display">{{rollDisplay[19]}}</div>
+    <div class="roll-display">{{rollDisplay[20]}}</div>
+    <div class="frame-score">{{frameScores[10-1]}}</div>
+  </div>
+</div>
