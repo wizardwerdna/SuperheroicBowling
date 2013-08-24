@@ -48,3 +48,23 @@ describe "Features: ", ->
         roll(3)
         reset()
         (expect rollsDisplay()).toBe "[]"
+
+  frameScoresDisplay = -> app.find('.frameScores').text()
+
+  describe "Scoring", ->
+    describe "output means", ->
+      it "should display an initially empty set list of frame scores", ->
+        (expect frameScoresDisplay()).toBe "[]"
+
+    describe "should score an incomplete frames", ->
+      it "should score a single non-strike roll", ->
+        roll(3)
+        (expect frameScoresDisplay()).toBe "[]"
+
+    describe "should score a complete frame", ->
+      it "should score an open frame", ->
+        roll(0); roll(1)
+        (expect frameScoresDisplay()).toBe "[1]"
+        reset()
+        roll(0); roll(0)
+        (expect frameScoresDisplay()).toBe "[0]"

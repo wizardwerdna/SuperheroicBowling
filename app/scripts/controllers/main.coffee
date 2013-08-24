@@ -2,6 +2,7 @@
 
 angular.module('bowlingApp')
   .controller 'MainCtrl', ($scope) ->
+
     $scope.rolls = []
 
     $scope.addRoll = (pins)->
