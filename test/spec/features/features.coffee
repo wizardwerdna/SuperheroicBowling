@@ -16,7 +16,7 @@ describe "Features: ", ->
 
   roll = (pins) -> app.find('.roll').eq(pins).click()
   reset = -> app.find('.reset').click()
-  rollsDisplay = -> app.find('.rolls').text()
+  rollsDisplay = -> app.find('.roll-display').text()
 
   describe "Data Entry", ->
 
@@ -31,25 +31,28 @@ describe "Features: ", ->
 
     describe "output means", ->
       it "should display initially empty list of rolls", ->
-        (expect rollsDisplay()).toBe "[]"
+        (expect rollsDisplay()).toBe ""
 
     describe "bowling means", ->
       it "should display a gutter roll", ->
         roll(0)
-        (expect rollsDisplay()).toBe "[0]"
+        (expect rollsDisplay()).toBe "-"
       it "should display a pin drop roll", ->
         roll(5)
-        (expect rollsDisplay()).toBe "[5]"
+        (expect rollsDisplay()).toBe "5"
       it "should display two rolls", ->
         roll(3); roll(4)
-        (expect rollsDisplay()).toBe "[3,4]"
+        (expect rollsDisplay()).toBe "34"
 
       it "should display an empty list upon reset", ->
         roll(3)
         reset()
-        (expect rollsDisplay()).toBe "[]"
+        (expect rollsDisplay()).toBe ""
 
   frameScoresDisplay = -> app.find('.frameScores').text()
+  frameScore = -> app.find('.frame-score')
+  frameScoreArray = -> frameScore().get().map((e)->$(e).text()).filter((e)->e!="")
+  frameScoresDisplay = -> "[#{frameScoreArray().join(',')}]"
 
   describe "Scoring", ->
     describe "output means", ->
@@ -68,3 +71,25 @@ describe "Features: ", ->
         reset()
         roll(0); roll(0)
         (expect frameScoresDisplay()).toBe "[0]"
+
+  rollDisplay = -> app.find('.roll-display').text()
+
+  describe "Roll Display", ->
+    describe "output means", ->
+      it "should display an initially empty list of frame scores", ->
+        (expect rollDisplay()).toBe ""
+
+      it "should display a single pin roll", ->
+        roll(4)
+        (expect rollDisplay()).toBe "4"
+        reset()
+        roll(5)
+        (expect rollDisplay()).toBe "5"
+
+      it "should display a gutter ball as a '-'", ->
+        roll(0)
+        (expect rollDisplay()).toBe "-"
+      it "should display a strike as ' X'", ->
+        roll(10)
+        (expect rollDisplay()).toBe " X"
+
